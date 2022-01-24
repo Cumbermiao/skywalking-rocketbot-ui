@@ -15,31 +15,50 @@
  * limitations under the License.
  */
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const webpack = require('webpack');
+const { ModuleFederationPlugin } = webpack.container;
+
+const federation = new ModuleFederationPlugin({
+  name: 'SkyWalking',
+  filename: 'remote-skywalking.js',
+  exposes: {
+    './SKButton': './src/components/rk-button.vue',
+  },
+  shared: require('./package.json').dependencies,
+});
+
 module.exports = {
   productionSourceMap: process.env.NODE_ENV !== 'production',
+  publicPath: 'auto',
   devServer: {
     proxy: {
       '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
+        target: `${process.env.SW_PROXY_TARGET || 'http://10.3.7.243:12800'}`,
         changeOrigin: true,
       },
     },
+    port: 8090,
+    hot: true,
+    compress: true,
+    historyApiFallback: true,
+    allowedHosts: 'all',
   },
   chainWebpack: (config) => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
+    config.optimization.delete('splitChunks');
+    // const svgRule = config.module.rule('svg');
+    // svgRule.uses.clear();
+    // svgRule
+    //   .use('svg-sprite-loader')
+    //   .loader('svg-sprite-loader')
+    //   .options({
+    //     symbolId: '[name]',
+    //   });
   },
   configureWebpack: {
-    plugins: [new MonacoWebpackPlugin()],
+    plugins: [new MonacoWebpackPlugin(), federation],
     optimization: {
       splitChunks: {
-        chunks: 'all',
+        chunks: 'async',
         cacheGroups: {
           echarts: {
             name: 'echarts',
@@ -53,6 +72,19 @@ module.exports = {
           },
         },
       },
+    },
+    module: {
+      rules: [
+        // fix: webpack5默认使用 asset/resource 处理 svg 导致 svg 组件图标不展示问题
+        {
+          test: /\.svg$/,
+          loader: 'svg-sprite-loader',
+          options: {
+            symbolId: '[name]',
+          },
+          type: 'javascript/auto',
+        },
+      ],
     },
   },
 };

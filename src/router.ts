@@ -38,43 +38,43 @@ export const routes: RouteConfig[] = [
         component: () => import('./views/containers/dashboard.vue'),
         meta: { icon: 'chart', title: 'dashboard', exact: true },
       },
-      {
-        path: 'topology',
-        component: () => import('./views/containers/topology/topology.vue'),
-        meta: { icon: 'issues', title: 'topology', exact: false },
-      },
-      {
-        name: 'trace',
-        path: 'trace',
-        component: () => import('./views/containers/trace.vue'),
-        props: true,
-        meta: { icon: 'merge', title: 'trace', exact: false },
-      },
-      {
-        path: 'profile',
-        component: () => import('./views/containers/profile.vue'),
-        meta: { icon: 'timeline', title: 'profile', exact: false },
-      },
-      {
-        path: 'log',
-        component: () => import('./views/containers/log.vue'),
-        meta: { icon: 'assignment', title: 'log', exact: false },
-      },
-      {
-        path: 'alarm',
-        component: () => import('./views/containers/alarm.vue'),
-        meta: { icon: 'spam', title: 'alarm', exact: false },
-      },
-      {
-        path: 'event',
-        component: () => import('./views/containers/event.vue'),
-        meta: { icon: 'storage', title: 'event', exact: false },
-      },
-      {
-        path: 'debug',
-        component: () => import('./views/containers/debug.vue'),
-        meta: { icon: 'library_books', title: 'debug', exact: false },
-      },
+      // {
+      //   path: 'topology',
+      //   component: () => import('./views/containers/topology/topology.vue'),
+      //   meta: { icon: 'issues', title: 'topology', exact: false },
+      // },
+      // {
+      //   name: 'trace',
+      //   path: 'trace',
+      //   component: () => import('./views/containers/trace.vue'),
+      //   props: true,
+      //   meta: { icon: 'merge', title: 'trace', exact: false },
+      // },
+      // {
+      //   path: 'profile',
+      //   component: () => import('./views/containers/profile.vue'),
+      //   meta: { icon: 'timeline', title: 'profile', exact: false },
+      // },
+      // {
+      //   path: 'log',
+      //   component: () => import('./views/containers/log.vue'),
+      //   meta: { icon: 'assignment', title: 'log', exact: false },
+      // },
+      // {
+      //   path: 'alarm',
+      //   component: () => import('./views/containers/alarm.vue'),
+      //   meta: { icon: 'spam', title: 'alarm', exact: false },
+      // },
+      // {
+      //   path: 'event',
+      //   component: () => import('./views/containers/event.vue'),
+      //   meta: { icon: 'storage', title: 'event', exact: false },
+      // },
+      // {
+      //   path: 'debug',
+      //   component: () => import('./views/containers/debug.vue'),
+      //   meta: { icon: 'library_books', title: 'debug', exact: false },
+      // },
     ],
   },
 ];

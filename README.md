@@ -1,45 +1,23 @@
-Apache SkyWalking Rocketbot UI
-===============
+## webpack5 升级
 
-<img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
+### 1. rk-icon 图标组件使用时 svg 图标不展示问题；
 
-[Apache SkyWalking](https://github.com/apache/incubator-skywalking) UI.
-
-![NPM BUILD](https://github.com/apache/skywalking-rocketbot-ui/workflows/Node%20CI/badge.svg)
-
-# Contact Us
-* Submit an [issue](https://github.com/apache/skywalking/issues)
-* Mailing list: **dev@skywalking.apache.org**. Mail to `dev-subscribe@skywalking.apache.org`, follow the reply to subscribe the mailing list
-* Join `skywalking` channel at [Apache Slack](http://s.apache.org/slack-invite)
-* QQ Group: 392443393, 901167865
-
-## Release
-This repo wouldn't release separately. All source codes have been included in the main repo release. The tags match the [main repo](https://github.com/apache/skywalking) tags.
-
-## Development
-
- The app was built with [vue + typescript](https://github.com/vuejs/vue).
-
-### Prepare
-
-1. Fork, then clone the repo and change directory into it.
-1. Install dependencies via `npm`:
-
-```
-npm install
+处理步骤： 使用命令查看 webpack 实际配置， 发现默认使用 `asset/resource` 处理 svg 文件；修改 webpack 配置如下修复该问题：
+```js
+{
+  test: /\.svg$/,
+  loader: 'svg-sprite-loader',
+  options: {
+    symbolId: '[name]'
+  },
+  type: 'javascript/auto'
+}
 ```
 
-### Build
+### 2. `ScriptExternalLoadError: Loading script failed. (missing http://localhost:8090/remoteEntry.js)`
 
-**Notice, as SkyWalking primary UI, the npm build has been integration in SkyWalking dist build.** 
+根因分析：vue.config.js 中配置了 splitChunks.chunks 为 `all`的分包策略导致的远程 app 的资源无法被加载。建议修改为 `async`,`initial`会导致打包体积较大。
 
-**All following builds are for dev.**
-```
-npm install
-npm run serve
-```
+### 3. 从 remote 的文件加载资源时，加载的域名为当前应用的域名。
 
-The default UI address is `http://localhost:8080`.
-
-# License
-[Apache 2.0 License.](/LICENSE)
+处理步骤：设置 vue.config.js 中的 publicPath 为 `auto` 即可。
